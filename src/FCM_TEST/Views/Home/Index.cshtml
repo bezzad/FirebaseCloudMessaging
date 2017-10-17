@@ -80,11 +80,11 @@ limitations under the License.
     <script>
         // Initialize Firebase
         var config = {
-            apiKey: "AIzaSyCZ4FSUaAWrbmcirHaBnYvmDnTaQjwTxJ4",
-            authDomain: "test-76fde.firebaseapp.com",
-            databaseURL: "https://test-76fde.firebaseio.com",
-            projectId: "test-76fde",
-            storageBucket: "test-76fde.appspot.com",
+            //apiKey: "AIzaSyCZ4FSUaAWrbmcirHaBnYvmDnTaQjwTxJ4",
+            //authDomain: "test-76fde.firebaseapp.com",
+            //databaseURL: "https://test-76fde.firebaseio.com",
+            //projectId: "test-76fde",
+            //storageBucket: "test-76fde.appspot.com",
             messagingSenderId: "710554227089"
         };
         firebase.initializeApp(config);
@@ -177,6 +177,7 @@ limitations under the License.
             if (!isTokenSentToServer()) {
                 console.log('Sending token to server...');
                 token = currentToken; // TODO(developer): Send the current token to your server.
+                $.post("@Url.Action("StoreToken", "Home")", { token: currentToken});
                 setTokenSentToServer(true);
             } else {
                 console.log('Token already sent to server so won\'t send it again ' +
