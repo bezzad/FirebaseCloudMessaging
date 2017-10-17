@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace FCM_PushNotification.Models
 {
-    public class PushNotificationModel
+    public class MessageModel
     {
         [JsonProperty(propertyName: "to")]
         public string To { get; set; }

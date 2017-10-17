@@ -12,16 +12,26 @@ namespace FCM_PushNotification.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var model = new Notification()
+            {
+                Title = "         طاقچه",
+                Body = "متن آزمایشی از سرور فایربیس",
+                Vibrate = new[] { 500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500 },
+                Icon = "https://taaghche.ir/assets/images/taaghchebrand.png",
+                ClickAction = "https://taaghche.ir",
+                Tag = Guid.NewGuid().ToString("N") // unique notify or update last noitfy on client
+            };
+            return View(model);
         }
 
-        public IActionResult SendMessage()
+        [HttpPost]
+        public IActionResult SendMessage(Notification model)
         {
-            SendPushNotification();
-            return Ok();
+            SendPushNotification(model);
+            return View("Index", model);
         }
 
-        public static void SendPushNotification()
+        public static void SendPushNotification(Notification model)
         {
             try
             {
@@ -29,18 +39,10 @@ namespace FCM_PushNotification.Controllers
                 var messagingSenderId = "710554227089";
                 var tRequest = WebRequest.Create("https://fcm.googleapis.com/fcm/send");
 
-                var pn = new PushNotificationModel()
+                var pn = new MessageModel()
                 {
                     To = "ch6V0_mJ4vA:APA91bE-FkuphDLb0QGCyDZCKZoqUP8MxJuJh79CMKJO8bGIHWTuIpO20Kcx8Yc1VT7PyAFHnJ9mqBiHzRC7dtghYyyjX6qVhN-WK3M8FAEAvKD0f5I5F9vAJDqEMKeE5LVYmIO13ANS",
-                    Notification = new Notification()
-                    {
-                        Title = "         طاقچه",
-                        Body = "متن آزمایشی از سرور فایربیس",
-                        Vibrate = new[] { 500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500 },
-                        Icon = "https://taaghche.ir/assets/images/taaghchebrand.png",
-                        ClickAction = "https://taaghche.ir",
-                        Tag = Guid.NewGuid().ToString("N") // unique notify or update last noitfy on client
-                    }
+                    Notification = model
                 };
 
                 tRequest.Method = "post";

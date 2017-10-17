@@ -1,6 +1,7 @@
 ﻿@{
     Layout = null;
 }
+@model Notification
 
 <!DOCTYPE html>
 <!--
@@ -46,6 +47,18 @@ limitations under the License.
                 <!-- Container for the Table of content -->
                 <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
                     <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        @Html.DisplayNameFor(m => m.Title)
+                        @Html.TextBoxFor(m => m.Title)
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        @Html.DisplayNameFor(m => m.Body)
+                        @Html.TextBoxFor(m => m.Body)
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        @Html.DisplayNameFor(m => m.Icon)
+                        @Html.TextBoxFor(m => m.Icon)
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
                         <h4>Push Notifications</h4>
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                                 onclick="pushNotifications()">
@@ -58,7 +71,15 @@ limitations under the License.
     </div>
     <script>
         function pushNotifications() {
-            $.getJSON("@Url.Action("SendMessage", "Home")", function (d){});
+            $.post("@Url.Action("SendMessage", "Home")",
+                {
+                    @nameof(Model.Title): $("#@nameof(Model.Title)").val(),
+                    @nameof(Model.Body): $("#@nameof(Model.Body)").val(),
+                    @nameof(Model.Icon): $("#@nameof(Model.Icon)").val()
+                },
+                function(d) {
+                    
+                });
         }
     </script>
 </body>
