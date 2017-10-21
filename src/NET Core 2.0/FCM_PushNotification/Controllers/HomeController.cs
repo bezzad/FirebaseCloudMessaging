@@ -41,8 +41,7 @@ namespace FCM_PushNotification.Controllers
             SendPushNotification(model);
             return Ok();
         }
-
-       
+        
         public async void SendPushNotification(Notification model)
         {
             try
