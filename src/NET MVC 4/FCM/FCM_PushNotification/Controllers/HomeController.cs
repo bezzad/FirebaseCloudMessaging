@@ -68,22 +68,22 @@ namespace FCM_PushNotification.Controllers
                     tRequest.Headers.Add($"Sender: id={messagingSenderId}");
                     tRequest.ContentLength = byteArray.Length;
 
-                    tRequest.GetRequestStream();
-                    //using (var dataStream = tRequest.GetRequestStream())
-                    //{
-                    //    dataStream.Write(byteArray, 0, byteArray.Length);
-                    //    using (var tResponse = tRequest.GetResponse())
-                    //    {
-                    //        using (var dataStreamResponse = tResponse.GetResponseStream())
-                    //        {
-                    //            using (var tReader = new StreamReader(dataStreamResponse))
-                    //            {
-                    //                var sResponseFromServer = tReader.ReadToEnd();
-                    //                var str = sResponseFromServer;
-                    //            }
-                    //        }
-                    //    }
-                    //}
+                    //tRequest.GetRequestStream();
+                    using (var dataStream = tRequest.GetRequestStream())
+                    {
+                        dataStream.Write(byteArray, 0, byteArray.Length);
+                        using (var tResponse = tRequest.GetResponse())
+                        {
+                            using (var dataStreamResponse = tResponse.GetResponseStream())
+                            {
+                                using (var tReader = new StreamReader(dataStreamResponse))
+                                {
+                                    var sResponseFromServer = tReader.ReadToEnd();
+                                    var str = sResponseFromServer;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
