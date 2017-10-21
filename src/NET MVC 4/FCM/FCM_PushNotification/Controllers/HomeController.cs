@@ -24,7 +24,7 @@ namespace FCM_PushNotification.Controllers
             return conn.ToString();
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var model = new Notification()
             {
@@ -35,6 +35,8 @@ namespace FCM_PushNotification.Controllers
                 ClickAction = "https://taaghche.ir",
                 Tag = Guid.NewGuid().ToString("N") // unique notify or update last noitfy on client
             };
+
+            ViewData["tokens"] = (await GetTokensAsync()).ToArray();
             return View(model);
         }
 
@@ -67,8 +69,7 @@ namespace FCM_PushNotification.Controllers
                     tRequest.Headers.Add($"Authorization: key={serverKey}");
                     tRequest.Headers.Add($"Sender: id={messagingSenderId}");
                     tRequest.ContentLength = byteArray.Length;
-
-                    //tRequest.GetRequestStream();
+                    
                     using (var dataStream = tRequest.GetRequestStream())
                     {
                         dataStream.Write(byteArray, 0, byteArray.Length);

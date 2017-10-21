@@ -1,24 +1,10 @@
 ﻿@{
     Layout = null;
+    var tokens = ViewData["tokens"] as string[] ?? new string[] { };
 }
 @model FCM_PushNotification.Models.Notification
 
 <!DOCTYPE html>
-<!--
-Copyright (c) 2016 Google Inc.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
 <html>
 <head>
     <meta charset=utf-8 />
@@ -59,6 +45,14 @@ limitations under the License.
                         @Html.TextBoxFor(m => m.Icon)
                     </div>
                     <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        @Html.DisplayNameFor(m => m.ClickAction)
+                        @Html.TextBoxFor(m => m.ClickAction)
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                        @Html.DisplayNameFor(m => m.Tag)
+                        @Html.TextBoxFor(m => m.Tag)
+                    </div>
+                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
                         <h4>Push Notifications</h4>
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
                                 onclick="pushNotifications()">
@@ -67,15 +61,28 @@ limitations under the License.
                     </div>
                 </div>
             </div>
+            <hr />
+            <br />
+            <table>
+                <thead><td>No.</td><td>Token</td></thead>
+                @for (int i = 1; i <= tokens.Count(); i++)
+                {
+                    <tr><td>@i</td><td>@tokens[i-1]</td></tr>
+                }
+            </table>
+
         </main>
     </div>
+
     <script>
         function pushNotifications() {
             $.post("@Url.Action("SendMessage", "Home")",
                 {
                     Title: $("#Title").val(),
                     Body: $("#Body").val(),
-                    Icon: $("#Icon").val()
+                    Icon: $("#Icon").val(),
+                    ClickAction: $("#ClickAction").val(),
+                    Tag: $("#Tag").val()
                 },
                 function(d) {
 

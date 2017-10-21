@@ -40,7 +40,7 @@ namespace FCM_PushNotification.Models
         public string Title { get; set; }
 
         [JsonProperty(propertyName: "vibrate")]
-        public int[] Vibrate { get; set; } = { 500, 110, 500 };
+        public int[] Vibrate { get; set; } = { 500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500 };
 
         [JsonProperty(propertyName: "icon")]
         public string Icon { get; set; }
