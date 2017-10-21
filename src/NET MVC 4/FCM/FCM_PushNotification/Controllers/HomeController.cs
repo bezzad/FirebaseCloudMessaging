@@ -1,16 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Dapper;
 using FCM_PushNotification.Models;
 
 namespace FCM_PushNotification.Controllers
 {
     public class HomeController : Controller
     {
-        string storagePath = "D:\\UserTokens.txt";
+        public static string GetConnStr()
+        {
+#if DEBUG
+            var conn = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["debug"];
+#else
+            var conn = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["release"];
+#endif
+            return conn.ToString();
+        }
 
         public ActionResult Index()
         {
@@ -27,20 +39,19 @@ namespace FCM_PushNotification.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendMessage(Notification model)
+        public async Task<ActionResult> SendMessage(Notification model)
         {
-            SendPushNotification(model);
+            await SendPushNotificationAsync(model);
             return new HttpStatusCodeResult(200);
         }
 
-        public void SendPushNotification(Notification model)
+        public async Task SendPushNotificationAsync(Notification model)
         {
             try
             {
                 var serverKey = "AAAApXBVEZE:APA91bH56ib3KIqSrLy7h64y6kXjNU_KNvHGG365u3r-ii8TOjaf-jykU25Gm1o5XvWBRMgQIUm1KVtV4NQqkVBp2usA7NDL16aGp3Qq-5WhzxmPCCBTofXlItoCoFE9G_Ct-XoKjWMq";
                 var messagingSenderId = "710554227089";
-                var tokens = GetTokensAsync();
-                tokens = tokens.Distinct().ToArray();
+                var tokens = await GetTokensAsync();
                 foreach (var userToken in tokens)
                 {
                     var pn = new MessageModel()
@@ -57,21 +68,22 @@ namespace FCM_PushNotification.Controllers
                     tRequest.Headers.Add($"Sender: id={messagingSenderId}");
                     tRequest.ContentLength = byteArray.Length;
 
-                    using (var dataStream = tRequest.GetRequestStream())
-                    {
-                        dataStream.Write(byteArray, 0, byteArray.Length);
-                        using (var tResponse = tRequest.GetResponse())
-                        {
-                            using (var dataStreamResponse = tResponse.GetResponseStream())
-                            {
-                                using (var tReader = new StreamReader(dataStreamResponse))
-                                {
-                                    var sResponseFromServer = tReader.ReadToEnd();
-                                    var str = sResponseFromServer;
-                                }
-                            }
-                        }
-                    }
+                    tRequest.GetRequestStream();
+                    //using (var dataStream = tRequest.GetRequestStream())
+                    //{
+                    //    dataStream.Write(byteArray, 0, byteArray.Length);
+                    //    using (var tResponse = tRequest.GetResponse())
+                    //    {
+                    //        using (var dataStreamResponse = tResponse.GetResponseStream())
+                    //        {
+                    //            using (var tReader = new StreamReader(dataStreamResponse))
+                    //            {
+                    //                var sResponseFromServer = tReader.ReadToEnd();
+                    //                var str = sResponseFromServer;
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
             }
             catch (Exception ex)
@@ -80,15 +92,15 @@ namespace FCM_PushNotification.Controllers
             }
         }
 
-        public string[] GetTokensAsync()
+        public async Task<IEnumerable<string>> GetTokensAsync()
         {
-            if (System.IO.File.Exists(storagePath))
+            IEnumerable<string> res;
+            using (var conn = new SqlConnection(GetConnStr()))
             {
-                var tokens = System.IO.File.ReadAllLines(storagePath, Encoding.UTF8);
-                return tokens;
+                res = await conn.QueryAsync<string>("select token from Tokens");
             }
 
-            return null;
+            return res;
         }
 
     }

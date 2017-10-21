@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCM", "FCM\FCM.csproj", "{9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCM_PushNotification", "FCM_PushNotification\FCM_PushNotification.csproj", "{B9E95F01-605E-4D88-B587-A9F6D8B07765}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "database", "database", "{E65318FE-B556-4218-B3DE-4FA9475F359D}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\database\xomorodc_fcm.mdf = ..\..\database\xomorodc_fcm.mdf
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
