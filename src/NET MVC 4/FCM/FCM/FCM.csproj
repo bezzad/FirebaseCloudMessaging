@@ -129,9 +129,6 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Scripts\FCM_config.js" />
     <Content Include="firebase-messaging-sw.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
