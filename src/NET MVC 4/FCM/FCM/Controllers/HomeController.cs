@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Web.Mvc;
-using Dapper;
 
 namespace FCM.Controllers
 {
     public class HomeController : Controller
     {
-        public static string GetConnStr()
-        {
-#if DEBUG
-            var conn = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["debug"];
-#else
-            var conn = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["release"];
-#endif
-            return conn.ToString();
-        }
+        private FileInfo TokensFile { get; } = new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"fcm\tokens.txt"));
 
         public ActionResult Index()
         {
@@ -25,20 +17,26 @@ namespace FCM.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> StoreToken(string token)
+        public ActionResult StoreToken(string token)
         {
-            await StoreUserFcmTokenAsync(token);
+            StoreUserFcmToken(token);
             return new HttpStatusCodeResult(200);
         }
 
-        private async Task StoreUserFcmTokenAsync(string token)
+        private void StoreUserFcmToken(string token)
         {
-            using (var conn = new SqlConnection(GetConnStr()))
+            if (!TokensFile.Exists)
             {
-                var res = await conn.ExecuteAsync(@"if not exists (select 1 from Tokens as t where @Token = t.Token) 
-                                                        Insert into Tokens values(@Username, @Token)", 
-                                                    new { Username = Guid.NewGuid().ToString("N"), Token = token });
+                TokensFile.Directory?.Create();
+                TokensFile.Create();
             }
+
+            var tokens = System.IO.File.ReadAllLines(TokensFile.FullName, Encoding.UTF8).ToList();
+
+            if (tokens.All(t => t != token))
+                tokens.Add(token);
+            
+            System.IO.File.WriteAllLines(TokensFile.FullName, tokens);
         }
     }
 }

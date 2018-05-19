@@ -1,28 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Dapper;
 using FCM_PushNotification.Models;
 
 namespace FCM_PushNotification.Controllers
 {
     public class HomeController : Controller
     {
-        public static string GetConnStr()
-        {
-#if DEBUG
-            var conn = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["debug"];
-#else
-            var conn = System.Web.Configuration.WebConfigurationManager.ConnectionStrings["release"];
-#endif
-            return conn.ToString();
-        }
+        private FileInfo TokensFile { get; } = new FileInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"fcm\tokens.txt"));
 
         public async Task<ActionResult> Index()
         {
@@ -36,24 +26,24 @@ namespace FCM_PushNotification.Controllers
                 Tag = Guid.NewGuid().ToString("N") // unique notify or update last noitfy on client
             };
 
-            ViewData["tokens"] = (await GetTokensAsync()).ToArray();
+            ViewData["tokens"] = GetTokens().ToArray();
             return View(model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> SendMessage(Notification model)
+        public ActionResult SendMessage(Notification model)
         {
-            await SendPushNotificationAsync(model);
+            SendPushNotification(model);
             return new HttpStatusCodeResult(200);
         }
 
-        public async Task SendPushNotificationAsync(Notification model)
+        private void SendPushNotification(Notification model)
         {
             try
             {
                 var serverKey = "AAAApXBVEZE:APA91bH56ib3KIqSrLy7h64y6kXjNU_KNvHGG365u3r-ii8TOjaf-jykU25Gm1o5XvWBRMgQIUm1KVtV4NQqkVBp2usA7NDL16aGp3Qq-5WhzxmPCCBTofXlItoCoFE9G_Ct-XoKjWMq";
                 var messagingSenderId = "710554227089";
-                var tokens = await GetTokensAsync();
+                var tokens = GetTokens();
                 foreach (var userToken in tokens)
                 {
                     var pn = new MessageModel()
@@ -93,15 +83,17 @@ namespace FCM_PushNotification.Controllers
             }
         }
 
-        public async Task<IEnumerable<string>> GetTokensAsync()
+        public List<string> GetTokens()
         {
-            IEnumerable<string> res;
-            using (var conn = new SqlConnection(GetConnStr()))
+            if (!TokensFile.Exists)
             {
-                res = await conn.QueryAsync<string>("select token from Tokens");
+                TokensFile.Directory?.Create();
+                TokensFile.Create();
             }
 
-            return res;
+            var tokens = System.IO.File.ReadAllLines(TokensFile.FullName, Encoding.UTF8).ToList();
+
+            return tokens;
         }
 
     }
