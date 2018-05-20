@@ -1,5 +1,3 @@
-using System;
-
 namespace FCM_TEST.Models
 {
     public class ErrorViewModel

@@ -1,5 +1,3 @@
-using System;
-
 namespace FCM_PushNotification.Models
 {
     public class ErrorViewModel

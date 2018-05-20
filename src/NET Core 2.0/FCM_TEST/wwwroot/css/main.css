@@ -14,41 +14,42 @@
  * limitations under the License.
  */
 
-html, body {
-  font-family: 'Roboto', 'Helvetica', sans-serif;
-}
-a {
-  text-decoration: none;
-}
+html, body { font-family: 'Roboto', 'Helvetica', sans-serif; }
+
+a { text-decoration: none; }
+
 li a {
-  text-decoration: underline;
-  color: #0288d1;
+    color: #0288d1;
+    text-decoration: underline;
 }
+
 .mdl-grid {
-  max-width: 1024px;
-  margin: auto;
+    margin: auto;
+    max-width: 1024px;
 }
-.mdl-layout__header-row {
-  padding: 0;
-}
+
+.mdl-layout__header-row { padding: 0; }
+
 .quickstart-user-details-container {
-  margin-top: 20px;
-  line-height: 25px;
+    line-height: 25px;
+    margin-top: 20px;
 }
-#quickstart-sign-in-status {
-  font-weight: bold;
-}
+
+#quickstart-sign-in-status { font-weight: bold; }
+
 pre {
-  overflow-x: scroll;
-  line-height: 18px;
+    line-height: 18px;
+    overflow-x: scroll;
 }
+
 code {
-  white-space: pre-wrap;
-  word-break: break-all;
+    white-space: pre-wrap;
+    word-break: break-all;
 }
+
 h3 {
-  background: url('../images/firebase-logo.png') no-repeat;
-  background-size: 40px;
-  padding-left: 50px;
-  color: white;
+    background: url('../images/firebase-logo.png') no-repeat;
+    background-size: 40px;
+    color: white;
+    padding-left: 50px;
 }

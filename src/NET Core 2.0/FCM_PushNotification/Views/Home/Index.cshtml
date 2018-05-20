@@ -21,7 +21,7 @@ limitations under the License.
 -->
 <html>
 <head>
-    <meta charset=utf-8 />
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firebase Cloud Messaging</title>
     <!-- Material Design Theming -->
@@ -33,54 +33,54 @@ limitations under the License.
     @*<link rel="manifest" href="/manifest.json">*@
 </head>
 <body>
-    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <!-- Header section containing title -->
-        <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
-                <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--8-col-desktop">
-                    <h3>Firebase Cloud Messaging - Push Notification</h3>
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <!-- Header section containing title -->
+    <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
+            <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--8-col-desktop">
+                <h3>Firebase Cloud Messaging - Push Notification</h3>
+            </div>
+        </div>
+    </header>
+    <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
+            <!-- Container for the Table of content -->
+            <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                    @Html.DisplayNameFor(m => m.Title)
+                    @Html.TextBoxFor(m => m.Title)
+                </div>
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                    @Html.DisplayNameFor(m => m.Body)
+                    @Html.TextBoxFor(m => m.Body)
+                </div>
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                    @Html.DisplayNameFor(m => m.Icon)
+                    @Html.TextBoxFor(m => m.Icon)
+                </div>
+                <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                    <h4>Push Notifications</h4>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                            onclick="pushNotifications()">
+                        Push Notifications
+                    </button>
                 </div>
             </div>
-        </header>
-        <main class="mdl-layout__content mdl-color--grey-100">
-            <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
-                <!-- Container for the Table of content -->
-                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop">
-                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-                        @Html.DisplayNameFor(m => m.Title)
-                        @Html.TextBoxFor(m => m.Title)
-                    </div>
-                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-                        @Html.DisplayNameFor(m => m.Body)
-                        @Html.TextBoxFor(m => m.Body)
-                    </div>
-                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-                        @Html.DisplayNameFor(m => m.Icon)
-                        @Html.TextBoxFor(m => m.Icon)
-                    </div>
-                    <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-                        <h4>Push Notifications</h4>
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
-                                onclick="pushNotifications()">
-                            Push Notifications
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-    <script>
-        function pushNotifications() {
-            $.post("@Url.Action("SendMessage", "Home")",
-                {
-                    @nameof(Model.Title): $("#@nameof(Model.Title)").val(),
-                    @nameof(Model.Body): $("#@nameof(Model.Body)").val(),
-                    @nameof(Model.Icon): $("#@nameof(Model.Icon)").val()
-                },
-                function(d) {
-                    
-                });
-        }
-    </script>
+        </div>
+    </main>
+</div>
+<script>
+    function pushNotifications() {
+        $.post("@Url.Action("SendMessage", "Home")",
+            {
+                @nameof(Model.Title): $("#@nameof(Model.Title)").val(),
+                @nameof(Model.Body): $("#@nameof(Model.Body)").val(),
+                @nameof(Model.Icon): $("#@nameof(Model.Icon)").val()
+            },
+            function(d) {
+
+            });
+    }
+</script>
 </body>
 </html>
